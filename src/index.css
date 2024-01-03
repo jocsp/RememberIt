@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+}
+
+@layer components {
+  .deck-card {
+    @apply rounded-md;
+    @apply bg-pink-500;
+    @apply px-4;
+    @apply py-2 text-white;
+  }
+
+  .deck-card:hover .star {
+    opacity: 1;
+  }
+
+  .star:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
+}

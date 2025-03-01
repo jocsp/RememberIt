@@ -1,12 +1,17 @@
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import AppContextProvider from "./context/AppContext.tsx";
+import AuthContextProvider from "./context/AuthContext.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import Fallback from "./components/Fallback.tsx";
+import { StrictMode } from "react";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
-  <AppContextProvider>
-    <App />
-  </AppContextProvider>
-  // </React.StrictMode>
+  <StrictMode>
+    <ErrorBoundary FallbackComponent={Fallback}>
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
+    </ErrorBoundary>
+  </StrictMode>
 );

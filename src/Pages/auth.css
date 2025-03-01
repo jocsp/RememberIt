@@ -1,0 +1,65 @@
+:root {
+  --background: #fafafa;
+  --primary: #5b21b6;
+  --primary-light: #7c4dc5;
+  --grey: #aaaaaaaa;
+}
+
+body {
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+.auth-container {
+  width: 100%;
+}
+
+.login-form {
+  max-height: 285px;
+}
+
+/* sign up form has an extra field, therefore more height needed */
+.signup-form {
+  max-height: 350px;
+}
+
+.auth-form {
+  box-sizing: border-box;
+  max-width: 400px;
+  border: 1px solid var(--grey);
+  border-radius: 0.2rem;
+  /* max height for transition purposes */
+
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 50px;
+  transition: max-height 1s ease-out 0s;
+  overflow: hidden;
+}
+
+.auth-form.expanded {
+  max-height: 500px;
+}
+
+.auth-form > input {
+  display: block;
+  width: 100%;
+}
+
+.text-input:focus {
+  outline: var(--primary) solid 1px;
+}
+
+/* MEDIA QUERIES */
+
+/* For Mobile Devices */
+@media (max-width: 767px) {
+  .auth-form {
+    width: 90%;
+    min-width: 320px;
+  }
+}

@@ -16,6 +16,7 @@ interface Card {
 
 interface Deck {
   id: Key;
+  userId: String;
   title: String;
   description: String;
   dateCreated: Date;

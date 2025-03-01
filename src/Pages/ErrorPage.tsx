@@ -1,4 +1,5 @@
 import { useRouteError } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function ErrorPage() {
   const error: unknown = useRouteError();
@@ -14,6 +15,12 @@ export default function ErrorPage() {
             (error as { statusText?: string })?.statusText}
         </i>
       </p>
+
+      <Link
+        to="/"
+        className="py-2 px-4 rounded-md bg-violet-600 text-violet-50 hover:bg-violet-600 active:bg-violet-800">
+        Return Home
+      </Link>
     </div>
   );
 }

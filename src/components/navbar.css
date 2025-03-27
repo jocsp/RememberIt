@@ -1,0 +1,101 @@
+:root {
+  --lightest-primary: #efe9f8;
+  --primary: #7c4dc5;
+}
+
+.navbar {
+  padding: 0rem clamp(2rem, 4vw, 4rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  width: clamp(3.5rem, 4.5vw, 4.5rem);
+}
+
+.rememberit {
+  font-size: clamp(1.75rem, 2.25vw, 2.25rem);
+  line-height: (2rem, 2.5vw, 2.5rem);
+  font-weight: 700;
+}
+
+.menu {
+  display: flex;
+  gap: 0.5rem;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: clamp(1.75rem, 2vw, 2rem);
+  height: 100%;
+}
+
+.menu-item {
+  color: #a0a0a0;
+  padding: 0.5rem 0.7rem;
+}
+
+.menu-item:hover {
+  color: var(--primary);
+  background-color: var(--lightest-primary);
+  border-radius: 5px;
+}
+
+.burger-menu {
+  display: none;
+  width: 1.5rem;
+}
+
+.close-icon {
+  display: none;
+  box-sizing: content-box;
+  border-radius: 50%;
+}
+
+.close-icon:hover {
+  background-color: #acacac11;
+}
+
+/* styles for mobiles */
+@media (max-width: 768px) {
+  .menu {
+    position: absolute;
+    display: block;
+    width: 0px;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    background-color: #f6f6f6;
+    height: 100vh;
+    border-left: 1px solid #f0f0f0;
+    /* might have to change this later, shadow can interfere with the elements behind */
+    box-shadow: -5px 0 5px 5px #f6f6f6;
+    transition: width 0.3s ease-out, opacity 0.2s ease-in;
+  }
+
+  .close-icon {
+    display: block;
+    padding: 1rem;
+    width: 2rem;
+  }
+
+  .menu.expanded {
+    padding: 0.5rem 1rem;
+    width: 80%;
+    opacity: 1;
+  }
+
+  .menu-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 1.8rem;
+    /* white-space property to avoid items to wrap when container's width is narrow */
+    white-space: nowrap;
+  }
+
+  .burger-menu {
+    display: inline;
+  }
+}
+
+/* styles for tablets */
+@media (min-width: 769px) and (max-width: 992px) {
+}

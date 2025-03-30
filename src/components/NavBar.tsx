@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import useAuthContext from "../hooks/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import { useErrorBoundary } from "react-error-boundary";
+import SettingsIcon from "./SettingsIcon";
 import burgerMenuIcon from "../assets/burger-menu-icon.svg";
 import closeIcon from "../assets/close-icon.svg";
 import { useEffect, useRef, useState } from "react";
@@ -62,14 +63,14 @@ const NavBar = () => {
             <img src={closeIcon} alt="Close Icon" width="40" height="40" />
           </button>
 
-          <Link to="/explore" className="menu-item">
-            Explore
-          </Link>
-          <Link to="/mydecks" className="menu-item">
-            My Decks
-          </Link>
           {!user ? (
             <>
+              <div className="salute">Howdy guest</div>
+
+              <button className="menu-item">
+                <SettingsIcon />
+                Settings
+              </button>
               <Link to="/login" className="menu-item">
                 Login
               </Link>
@@ -79,7 +80,13 @@ const NavBar = () => {
             </>
           ) : (
             <>
-              <button className="menu-item">{user.displayName}</button>
+              <div className="salute">
+                Welcome <span className="salute-name">{user.displayName}</span>
+              </div>
+              <button className="menu-item">
+                <SettingsIcon />
+                Settings
+              </button>
               <button onClick={handleLogout} className="menu-item">
                 Log out
               </button>

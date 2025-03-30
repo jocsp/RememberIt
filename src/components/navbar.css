@@ -28,15 +28,31 @@
   height: 100%;
 }
 
-.menu-item {
+.menu-item,
+.salute {
   color: #a0a0a0;
   padding: 0.5rem 0.7rem;
+  display: flex;
+  gap: 5px;
+}
+
+.salute-name {
+  color: var(--primary);
 }
 
 .menu-item:hover {
   color: var(--primary);
   background-color: var(--lightest-primary);
   border-radius: 5px;
+}
+
+.menu-icon {
+  width: clamp(1.25rem, 1.5vw, 1.5rem);
+  height: auto;
+}
+
+.menu-item:hover > .menu-icon {
+  fill: var(--primary);
 }
 
 .burger-menu {
@@ -83,12 +99,16 @@
     opacity: 1;
   }
 
-  .menu-item {
-    display: block;
+  .menu-item,
+  .salute {
     padding: 0.5rem 1rem;
     font-size: 1.8rem;
     /* white-space property to avoid items to wrap when container's width is narrow */
     white-space: nowrap;
+  }
+
+  .menu-icon {
+    display: none;
   }
 
   .burger-menu {

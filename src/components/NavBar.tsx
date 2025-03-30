@@ -79,8 +79,10 @@ const NavBar = () => {
             </>
           ) : (
             <>
-              <Link to="/decks">Decks</Link>
-              <button onClick={handleLogout}>Log out</button>
+              <button className="menu-item">{user.displayName}</button>
+              <button onClick={handleLogout} className="menu-item">
+                Log out
+              </button>
             </>
           )}
         </div>

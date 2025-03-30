@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { auth, isLoggedIn } from "../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 
@@ -13,14 +13,20 @@ const SignUp = () => {
     setError("");
 
     const formData = new FormData(e.target as HTMLFormElement);
-
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-      console.log(isLoggedIn());
+      // display name will be used for navbar
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: name });
     } catch (error) {
       console.error(error);
       // replacing Firebase: and error code from error.message

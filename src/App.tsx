@@ -42,19 +42,15 @@ function App() {
     },
     {
       path: "/login",
-      element: !user ? <Login /> : <Navigate to="/decks" />,
+      element: !user ? <Login /> : <Navigate to="/" />,
       errorElement: <ErrorPage />,
     },
     {
       path: "/signup",
-      element: !user ? <SignUp /> : <Navigate to="/decks" />,
+      element: !user ? <SignUp /> : <Navigate to="/" />,
       errorElement: <ErrorPage />,
     },
-    {
-      path: "/decks",
-      element: user ? <AllDecks /> : <Navigate to="/login" />,
-      errorElement: <ErrorPage />,
-    },
+
     // { path: "decks/:id", element: <SingleDeck />, loader: singleDeckLoader },
   ]);
   return <RouterProvider router={router} />;

@@ -2,16 +2,22 @@ import { Key } from "react";
 import { Link, useParams } from "react-router-dom"
 import useAuthContext from "../hooks/useAuthContext"
 import { List } from "../types"
+import LoadingListItem from "./LoadingListItem";
 
 const Lists = () => {
-  const {listName} = useParams();
+  const { listName } = useParams();
   // user contains the lists
-  const { user } = useAuthContext()
+  const { user, authInitializing } = useAuthContext()
   const { lists = [] } = user || {}
 
-  console.log(user)
-
   const renderLists = (lists: List[]) => {
+
+    // placeholder while the lists are fetched
+    if (authInitializing) {
+      return [1,2, 3, 4, 5].map((key) => {
+        return <LoadingListItem key={key} /> 
+      })
+    }
 
     const listElements = lists.map(list => {
       return (
@@ -30,6 +36,7 @@ const Lists = () => {
         <h2 className="lists-title">Lists</h2>
         <button className="new-list-button">+ New</button>
       </div>
+      <input className="list-search-bar" type="text" placeholder="Search a list..."/>
       <div className="lists-items">
         {renderLists(lists)}
       </div>

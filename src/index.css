@@ -226,7 +226,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .lists-title {
@@ -252,6 +252,21 @@ body {
     outline: 2px var(--primary-600) solid;
   }
 
+  /* LISTS SEARCH BAR */
+  .list-search-bar {
+    border: 1px var(--primary-50) solid;
+    background-color: #fafafa;
+    width: 100%;
+    border-radius: 0.6rem;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .list-search-bar:focus {
+    outline: 1px var(--primary-300) solid;
+  }
+
   .lists-items {
     display: flex;
     flex-direction: column;
@@ -263,13 +278,20 @@ body {
     border-radius: 3rem;
   }
 
+  .loading-list-item {
+    padding: 0.5rem 1.5rem;
+    border-radius: 3rem;
+    height: 2.5rem;
+    background-color: var(--primary-50);
+  }
+
   .lists-item:hover {
     background-color: var(--primary-50);
   }
 
   .lists-item.active {
-    background-color: var(--primary-400);
-    color: #ffffff;
+    background-color: var(--primary-300);
+    color: #fafafa;
   }
 
   .decks-container {

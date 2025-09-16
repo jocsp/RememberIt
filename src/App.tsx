@@ -1,5 +1,4 @@
 import "./index.css";
-import "./Pages/auth.css"; // TODO: Change everything from auth.css to a different file and delete this import
 import "./styles/components.css";
 import {
   RouterProvider,
@@ -7,27 +6,15 @@ import {
   Navigate,
 } from "react-router-dom";
 import ErrorPage from "./Pages/ErrorPage";
-import AllDecks from "./Pages/AllDecks";
-// import SingleDeck, { loader as singleDeckLoader } from "./Pages/SingleDeck";
-import HomePage from "./Pages/HomePage";
+import Decks from "./Pages/Decks";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebaseConfig";
 import useAuthContext from "./hooks/useAuthContext";
 import Testing from "./Pages/Testing";
 
 function App() {
   // useAuthContext
-  const { user, loginUser, logoutUser } = useAuthContext();
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loginUser(user);
-    } else {
-      logoutUser();
-    }
-  });
+  const { user } = useAuthContext();
 
   const router = createBrowserRouter([
     {
@@ -35,9 +22,18 @@ function App() {
       element: <Testing />,
       errorElement: <ErrorPage />,
     },
+
     {
+      // same as when user clicks on a list but it does not show any decks
       path: "/",
-      element: <HomePage />,
+      element: <Decks />,
+      errorElement: <ErrorPage />,
+    },
+
+    {
+      // path when the user clicks on a list
+      path: "/:listName",
+      element: <Decks />,
       errorElement: <ErrorPage />,
     },
     {

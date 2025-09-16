@@ -1,10 +1,28 @@
 import { Key } from "react";
 
+// *** ENUMS ***
+
 enum DIFFICULTIES {
   EASY,
   NORMAL,
   HARD,
 }
+
+// *** TYPES ***
+
+interface User {
+  uid: string,
+  name: string,
+  email: string
+  lists: List[]
+}
+
+interface List {
+  uid: String,
+  name: String,
+  nameSlug: String
+}
+
 interface Card {
   id: Key;
   question: String;
@@ -25,4 +43,4 @@ interface Deck {
 }
 
 export { DIFFICULTIES };
-export type { Deck, Card };
+export type { User, List, Deck, Card };

@@ -1,5 +1,4 @@
-import "./navbar.css";
-import remeberItLogo from "../assets/brain.png";
+import remeberItLogo from "../assets/brain.webp";
 import { Link } from "react-router-dom";
 import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";

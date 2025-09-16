@@ -1,5 +1,8 @@
-import { createContext, useReducer } from "react";
-import { User } from "firebase/auth";
+import { createContext, useReducer, useEffect, useState } from "react";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {auth, db} from "../firebaseConfig"
+import { onAuthStateChanged } from "firebase/auth";
+import { User, List } from "../types";
 
 enum ACTIONS {
   LOGIN,
@@ -8,6 +11,7 @@ enum ACTIONS {
 
 interface ContextType {
   user: User | null;
+  authInitializing: Boolean;
   loginUser: (user: User) => void;
   logoutUser: () => void;
 }
@@ -37,6 +41,45 @@ interface Props {
 }
 const AuthContextProvider = ({ children }: Props) => {
   const [user, dispatch] = useReducer(authReducer, null);
+  // variable to know if the auth process had finalized
+  // true means initializing, false that is still pending
+  const [authInitializing, setAuthInitializing] = useState(true)
+
+  useEffect(() => {
+    // onAuthStateChanged returns a function that removes the listener
+    const removeListener = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // retrieving user info to dispatch later
+        const userSnap = await getDoc(doc(db, "users", user.uid))
+        const userData = userSnap.data()
+
+        // retrieving user's lists
+        const listsRef = collection(db, "users", user.uid, "lists");
+        const listsSnap = await getDocs(listsRef);
+
+        // creating lists array
+        const lists: List[] = []
+        listsSnap.forEach(list => {
+          const listData = list.data()
+          lists.push({uid: list.id, name: listData.name, nameSlug: listData.nameSlug})
+        })
+
+        // dispatching user info to auth context user with custom data | not the data given by Firebase
+        loginUser({
+          uid: user.uid,
+          name: userData?.displayName ?? "",
+          email: userData?.email ?? "",
+          lists: lists
+        })
+      } else {
+        logoutUser()
+      }
+      setAuthInitializing(false)
+    });
+
+    // cleaning up
+    return () => removeListener()
+  }, [])
 
   function loginUser(user: User) {
     dispatch({ type: ACTIONS.LOGIN, user });
@@ -47,7 +90,7 @@ const AuthContextProvider = ({ children }: Props) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, loginUser, logoutUser, authInitializing }}>
       {children}
     </AuthContext.Provider>
   );

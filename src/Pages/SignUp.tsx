@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {collection, addDoc, doc, setDoc} from "firebase/firestore"
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import slugify from "../utils/slugify";
 
 const SignUp = () => {
   const [error, setError] = useState("");
@@ -24,9 +26,26 @@ const SignUp = () => {
         password
       );
 
-      // display name will be used for navbar
+      // update displayName to use it in the navbar
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
+
+      // save user to database, so I could store there all the things I need
+      await setDoc(doc(db, "users", user.uid), {
+        displayName: user.displayName || "",
+        email: user.email,
+      })
+
+      // creating rereference to lists subcollection
+      const listsReference = collection(db, "users", user.uid, "lists")
+
+      // adding the default list to the user's lists subcollection
+      await addDoc(listsReference, {
+        name: "My List",
+        // to query by the nameSlug
+        nameSlug: slugify("My List")
+      })
+
     } catch (error) {
       console.error(error);
       // replacing Firebase: and error code from error.message

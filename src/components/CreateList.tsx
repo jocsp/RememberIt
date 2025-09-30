@@ -1,3 +1,4 @@
+import { ToastContainer, toast } from "react-toastify";
 import { addDoc, collection } from "firebase/firestore";
 import { useEffect, useRef } from "react"
 import { db } from "../firebaseConfig";
@@ -76,8 +77,15 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
       nameSlug: slugify(listName)
     })
 
+    toast.success("List created successfully", {
+      autoClose: 3000,
+    })
+
     } catch (error) {
       console.error(error)
+      toast.error("Could not create the list. Please try again", {
+        autoClose: 3000
+      })
     } 
     // hide Create List component
     setShowCreateList(false)

@@ -48,7 +48,7 @@ const authReducer = (user: ReducerState, action: ActionType): ReducerState => {
 };
 
 interface Props {
-  children: JSX.Element;
+  children: JSX.Element[];
 }
 const AuthContextProvider = ({ children }: Props) => {
   const [user, dispatch] = useReducer(authReducer, null);

@@ -7,6 +7,7 @@ import { User, List } from "../types";
 enum ACTIONS {
   LOGIN,
   LOGOUT,
+  ADDLIST
 }
 
 interface ContextType {
@@ -14,11 +15,13 @@ interface ContextType {
   authInitializing: Boolean;
   loginUser: (user: User) => void;
   logoutUser: () => void;
+  addList: (list: List) => void;
 }
 
 type ActionType =
   | { type: ACTIONS.LOGIN; user: User }
-  | { type: ACTIONS.LOGOUT };
+  | { type: ACTIONS.LOGOUT }
+  | { type: ACTIONS.ADDLIST; list: List};
 
 type ReducerState = User | null;
 
@@ -30,6 +33,14 @@ const authReducer = (user: ReducerState, action: ActionType): ReducerState => {
       return action.user;
     case ACTIONS.LOGOUT:
       return null;
+    case ACTIONS.ADDLIST:
+    // check if user exists  
+    if (!user) {
+        console.error("There is no user to add lists to");
+        return user
+      }
+      // returns user with added list
+      return {...user, lists: [...user.lists, action.list]}
     default:
       console.error("Auth type does not exist in authReducer");
       return user;
@@ -89,8 +100,12 @@ const AuthContextProvider = ({ children }: Props) => {
     dispatch({ type: ACTIONS.LOGOUT });
   }
 
+  function addList(list: List) {
+    dispatch({type: ACTIONS.ADDLIST, list})
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loginUser, logoutUser, authInitializing }}>
+    <AuthContext.Provider value={{ user, loginUser, logoutUser, addList, authInitializing }}>
       {children}
     </AuthContext.Provider>
   );

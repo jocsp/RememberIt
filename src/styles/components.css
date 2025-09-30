@@ -1,5 +1,5 @@
 .primary-button {
-  background-color: var(--primary);
+  background-color: var(--primary-500);
   font-size: 1.25rem;
   line-height: 1.75rem;
   padding: 0.5rem 1.5rem;
@@ -8,7 +8,7 @@
 }
 
 .primary-button:hover {
-  background-color: var(--primary-light);
+  background-color: var(--primary-600);
   cursor: pointer;
 }
 

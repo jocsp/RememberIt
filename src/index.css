@@ -67,6 +67,12 @@ body {
   outline: var(--primary-500) solid 1px;
 }
 
+.primary-button {
+  background-color: var(--primary-500);
+  border-radius: 0.8rem;
+  width: 80%;
+}
+
 /* MEDIA QUERIES */
 
 /* For Mobile Devices */

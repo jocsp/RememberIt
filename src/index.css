@@ -215,6 +215,8 @@ body {
   }
 
   .lists-container {
+    display: flex;
+    flex-direction: column;
     min-height: 500px;
     /* max-height = viewport heigt - paddding applied to main content - clamp that calculates the height of the logo image - distance to separate the container from the bottom */
     max-height: calc(100vh - var(--main-content-padding) - clamp(var(--min-logo-width), 4.5vw, var(--max-logo-width)) - 1rem);
@@ -286,6 +288,9 @@ body {
   .lists-items {
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     gap: 0.5rem;
   }
 

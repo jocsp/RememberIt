@@ -267,6 +267,16 @@ body {
     outline: 1px var(--primary-300) solid;
   }
 
+  .create-list {
+    padding: 0.5rem 1.5rem;
+    border-radius: 3rem;
+    width: 100%;
+  }
+
+  .create-list:focus {
+    outline: 2px solid var(--primary-300);
+  }
+
   .lists-items {
     display: flex;
     flex-direction: column;

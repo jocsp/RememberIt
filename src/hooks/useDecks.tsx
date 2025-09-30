@@ -9,6 +9,7 @@ import { AirlineSeatLegroomReducedSharp } from "@mui/icons-material";
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = ( listName: string | undefined) => {
   const { user, authInitializing } = useAuthContext();
+  const userId = user?.uid;
   const [decks, setDecks] = useState<Deck[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
@@ -79,7 +80,7 @@ const useDecks = ( listName: string | undefined) => {
     setLoading(true)
     setDecks([])
     fetchDecks();
-  }, [user, authInitializing, listName]);
+  }, [userId, authInitializing, listName]);
 
   return { decks, loading };
 };

@@ -18,9 +18,9 @@ interface User {
 }
 
 interface List {
-  uid: String,
-  name: String,
-  nameSlug: String
+  uid: String;
+  name: String;
+  createdAt: Date;
 }
 
 interface Card {

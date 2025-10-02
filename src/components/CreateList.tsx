@@ -1,5 +1,5 @@
 import { ToastContainer, toast } from "react-toastify";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useRef } from "react"
 import { db } from "../firebaseConfig";
 import useAuthContext from "../hooks/useAuthContext";
@@ -61,20 +61,33 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
       throw new Error("Can't create list. User is null")
     }
 
-    // creating referencd to the list collection
-    const listCollection = collection(db, "users", user.uid, "lists")
+    // creating a referecen to a list using the name slug as the id
+    const listDocRef = doc(db, "users", user.uid, "lists", slugify(listName))
 
-    // add list to database and store the reference to the doc on docRef | needed to add list to context with the id of the list
-    const docRef = await addDoc(listCollection, {
-      name: listName,
-      nameSlug: slugify(listName)
+    // running a transaction to check if the list already exists in the database
+    await runTransaction(db, async (transaction) => {
+
+      const docSnap = await transaction.get(listDocRef)
+
+      // throw an error if it already exists
+      if (docSnap.exists()) {
+        throw new Error("List already exists, please use a different name.")
+      }
+
+      const newList = {
+        name: listName,
+        createdAt: serverTimestamp()
+      }
+
+      // add the list to the db using name slug for the id
+      transaction.set(listDocRef, newList)
     })
     
     // adding list to the context state
     addList({
-      uid: docRef.id,
+    uid: listDocRef.id,
       name: listName,
-      nameSlug: slugify(listName)
+      createdAt: new Date()
     })
 
     toast.success("List created successfully", {

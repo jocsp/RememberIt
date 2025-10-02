@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth, db } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {collection, addDoc, doc, setDoc} from "firebase/firestore"
+import {collection, doc, setDoc, serverTimestamp} from "firebase/firestore"
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import slugify from "../utils/slugify";
@@ -36,14 +36,14 @@ const SignUp = () => {
         email: user.email,
       })
 
-      // creating rereference to lists subcollection
-      const listsReference = collection(db, "users", user.uid, "lists")
+      // creating rereference to list document under lists subcollection
+      // setting the id as the slug name
+      const listDocRef = doc(db, "users", user.uid, "lists", slugify("My List"))
 
-      // adding the default list to the user's lists subcollection
-      await addDoc(listsReference, {
+      // adding the list to the database
+      await setDoc(listDocRef, {
         name: "My List",
-        // to query by the nameSlug
-        nameSlug: slugify("My List")
+        createdAt: serverTimestamp()
       })
 
     } catch (error) {

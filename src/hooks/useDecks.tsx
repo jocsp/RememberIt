@@ -1,10 +1,11 @@
 import { useEffect, useState, Key } from "react";
-import { getDocs, where, query, collection } from "firebase/firestore";
+import { getDocs, where, query, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { AirlineSeatLegroomReducedSharp } from "@mui/icons-material";
+import slugify from "../utils/slugify";
 
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = ( listName: string | undefined) => {
@@ -35,16 +36,16 @@ const useDecks = ( listName: string | undefined) => {
       }
       try {
 
-        // checking if the user has a list with indicated listName
-        const qList = query(collection(db, "users", userId, "lists"), where("nameSlug", "==", listName));
+        // checking if the user has a list with indicated listName || listName is already slugify
+        const listRef = doc(db, "users", userId, "lists", listName);
 
-        const listSnapshot = await getDocs(qList);
+        const listSnap = await getDoc(listRef);
 
-        if (listSnapshot.empty) {
+        if (!listSnap.exists()) {
           throw new Error (`The list ${listName} does not exist.`, { cause: "no-list-found" })
         }
 
-        // querying docs that belong to the user (userId) and belong to the specific list (listName)
+        // querying docs that belong to the user (userId) and belong to the specific list (listName) | listName is already slugify
         const q = query(collection(db, "decks"), where("userId", "==", userId), where("listName", "==", listName));
 
         const decksSnapshot = await getDocs(q);

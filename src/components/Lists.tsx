@@ -23,7 +23,7 @@ const Lists = () => {
 
     const listElements = lists.map(list => {
       return (
-        <Link className={`lists-item ${listName == list.nameSlug ? "active" : ""}`} key={list.uid as Key} to={`/${list.nameSlug}`}>
+        <Link className={`lists-item ${listName == list.uid ? "active" : ""}`} key={list.uid as Key} to={`/${list.uid}`}>
           {list.name}
         </Link>
       )

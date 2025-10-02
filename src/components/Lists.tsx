@@ -39,7 +39,7 @@ const Lists = () => {
         <button onClick={() => { setShowCreateList(true)}} className="new-list-button">+ New</button>
       </div>
       <input className="list-search-bar" type="text" placeholder="Search a list..."/>
-      <div className="lists-items">
+      <div className="lists-items pt-4 pb-4 pl-1 pr-2">
         {showCreateList ? <CreateList setShowCreateList={setShowCreateList} /> : null}
         {renderLists(lists)}
       </div>

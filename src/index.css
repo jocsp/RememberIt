@@ -5,6 +5,8 @@
 :root {
   --body-background: #f5f5f5;
   --primary-50: #efe9f8;
+  --primary-100: #ccbae8;
+  --primary-200: #b499dd;
   --primary-300: #916ace;
   --primary-400: #7c4dc5;
   --primary-500: #5b21b6;
@@ -290,8 +292,23 @@ body {
     flex-direction: column;
     flex: 1 1 auto;
     overflow-y: auto;
+    scrollbar-gutter: stable;
     overflow-x: hidden;
     gap: 0.5rem;
+  }
+
+  .lists-items::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  .lists-items::-webkit-scrollbar-thumb {
+    background-color: var(--primary-200);
+    border-radius: 0.5rem;
+  }
+
+  .lists-items::-webkit-scrollbar-track {
+    background-color: var(--primary-50);
+    border-radius: 0.5rem;
   }
 
   .lists-item {

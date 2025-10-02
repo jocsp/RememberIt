@@ -37,7 +37,7 @@ interface Deck {
   userId: String;
   title: String;
   description: String;
-  dateCreated: Date;
+  createdAt: Date;
   starred: Boolean;
   cards: Card[];
 }

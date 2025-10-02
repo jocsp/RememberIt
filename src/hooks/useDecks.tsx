@@ -58,7 +58,7 @@ const useDecks = ( listName: string | undefined) => {
             starred: docData.starred,
             userId: docData.userId,
             cards: docData.cards,
-            dateCreated: docData.dateCreated,
+            createdAt: docData.createdAt.toDate(),
           };
         });
 

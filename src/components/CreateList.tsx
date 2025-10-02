@@ -58,7 +58,7 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
     }
 
     if (!user) {
-      throw new Error("Can't create list. User is null")
+      throw new Error("Can't create list. User is null", { cause: "list-already-exists"})
     }
 
     // creating a referecen to a list using the name slug as the id
@@ -71,7 +71,7 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
 
       // throw an error if it already exists
       if (docSnap.exists()) {
-        throw new Error("List already exists, please use a different name.")
+        throw new Error("List already exists, please use a different name.", { cause: "list-already-exists"})
       }
 
       const newList = {
@@ -96,9 +96,13 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
 
     } catch (error) {
       console.error(error)
-      toast.error("Could not create the list. Please try again", {
-        autoClose: 3000
-      })
+
+      // check if error was thrown by our code, an then check which was the cause to then use the toast for the custom error message
+      if (error instanceof Error && error.cause == "list-already-exists") {
+        toast.error(error.message)
+      } else {
+        toast.error("Could not create the list. Please try again.")
+      }
     } 
     // hide Create List component
     setShowCreateList(false)

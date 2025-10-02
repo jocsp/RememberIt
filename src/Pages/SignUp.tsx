@@ -49,7 +49,6 @@ const SignUp = () => {
     } catch (error) {
       console.error(error);
       // replacing Firebase: and error code from error.message
-
       let message = (error as Error)?.message;
 
       if (!message) {

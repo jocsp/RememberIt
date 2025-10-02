@@ -9,6 +9,7 @@ import SettingsIcon from "./SettingsIcon";
 import burgerMenuIcon from "../assets/burger-menu-icon.svg";
 import closeIcon from "../assets/close-icon.svg";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { user } = useAuthContext();
@@ -36,7 +37,7 @@ const NavBar = () => {
       await signOut(auth);
       navigate("/");
     } catch (error) {
-      // TODO: push a notification with toastify or a similar library with the error
+      toast.error("Error trying to log out user")
       console.error(error);
       showBoundary(error);
     }

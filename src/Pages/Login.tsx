@@ -28,7 +28,6 @@ const Login = () => {
         // getting custom message based on firebase code
         message = getErrorMessage(error.code);
       }
-
       // in case the error is not a Firebase Error
       if (!message) {
         setError("An unexpected error ocurred. Please try again");

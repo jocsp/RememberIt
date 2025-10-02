@@ -4,6 +4,7 @@ import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = ( listName: string | undefined) => {
@@ -67,10 +68,11 @@ const useDecks = ( listName: string | undefined) => {
       } catch (error) {
         // this would be the error I threw in the code above trying to find the list using listName
         if (error instanceof Error && error.cause == "no-list-found") {
-          console.error(error.message)
-          // TODO: Add a toast notification error showing the error
-          navigate("/")
+          toast.error(error.message)
+        } else {
+          toast.error("Unexpected error occured.")
         }
+        navigate("/")
         console.error(error);
       }
     };

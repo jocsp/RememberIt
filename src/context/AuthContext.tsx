@@ -1,5 +1,5 @@
 import { createContext, useReducer, useEffect, useState } from "react";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
 import {auth, db} from "../firebaseConfig"
 import { onAuthStateChanged } from "firebase/auth";
 import { User, List } from "../types";
@@ -40,7 +40,7 @@ const authReducer = (user: ReducerState, action: ActionType): ReducerState => {
         return user
       }
       // returns user with added list
-      return {...user, lists: [...user.lists, action.list]}
+      return {...user, lists: [action.list, ...user.lists]}
     default:
       console.error("Auth type does not exist in authReducer");
       return user;
@@ -66,7 +66,8 @@ const AuthContextProvider = ({ children }: Props) => {
 
         // retrieving user's lists
         const listsRef = collection(db, "users", user.uid, "lists");
-        const listsSnap = await getDocs(listsRef);
+        const q = query(listsRef, orderBy("createdAt", "desc")) // query orders the lists by the date of creation
+        const listsSnap = await getDocs(q);
 
         // creating lists array
         const lists: List[] = []

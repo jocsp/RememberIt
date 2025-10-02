@@ -10,18 +10,12 @@ import Decks from "./Pages/Decks";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import useAuthContext from "./hooks/useAuthContext";
-import Testing from "./Pages/Testing";
 
 function App() {
   // useAuthContext
   const { user } = useAuthContext();
 
   const router = createBrowserRouter([
-    {
-      path: "/testing",
-      element: <Testing />,
-      errorElement: <ErrorPage />,
-    },
 
     {
       // same as when user clicks on a list but it does not show any decks

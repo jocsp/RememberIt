@@ -3,9 +3,7 @@ import { getDocs, where, query, collection, doc, getDoc } from "firebase/firesto
 import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
-import { useNavigate, useParams } from "react-router-dom";
-import { AirlineSeatLegroomReducedSharp } from "@mui/icons-material";
-import slugify from "../utils/slugify";
+import { useNavigate } from "react-router-dom";
 
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = ( listName: string | undefined) => {

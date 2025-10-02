@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth, db } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import {collection, doc, setDoc, serverTimestamp} from "firebase/firestore"
+import { doc, setDoc, serverTimestamp} from "firebase/firestore"
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import slugify from "../utils/slugify";

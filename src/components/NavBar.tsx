@@ -80,7 +80,7 @@ const NavBar = () => {
           ) : (
             <>
               <div className="salute">
-                Welcome <span className="salute-name">{user.displayName}</span>
+                Welcome <span className="salute-name">{user.name}</span>
               </div>
               <button className="menu-item">
                 <SettingsIcon />

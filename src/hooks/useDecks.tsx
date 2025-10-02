@@ -44,7 +44,7 @@ const useDecks = ( listName: string | undefined) => {
         }
 
         // querying docs that belong to the user (userId) and belong to the specific list (listName) | listName is already slugify
-        const q = query(collection(db, "decks"), where("userId", "==", userId), where("listName", "==", listName));
+        const q = query(collection(db, "decks"), where("userId", "==", userId), where("listId", "==", listName));
 
         const decksSnapshot = await getDocs(q);
 

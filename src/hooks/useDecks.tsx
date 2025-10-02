@@ -1,5 +1,5 @@
 import { useEffect, useState, Key } from "react";
-import { getDocs, where, query, collection, doc, getDoc } from "firebase/firestore";
+import { getDocs, where, query, collection, doc, getDoc, orderBy } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
@@ -44,7 +44,7 @@ const useDecks = ( listName: string | undefined) => {
         }
 
         // querying docs that belong to the user (userId) and belong to the specific list (listName) | listName is already slugify
-        const q = query(collection(db, "decks"), where("userId", "==", userId), where("listId", "==", listName));
+        const q = query(collection(db, "decks"), where("userId", "==", userId), where("listId", "==", listName), orderBy("createdAt", "desc"));
 
         const decksSnapshot = await getDocs(q);
 

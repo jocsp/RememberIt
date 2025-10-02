@@ -62,7 +62,7 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
     }
 
     // creating a referecen to a list using the name slug as the id
-    const listDocRef = doc(db, "users", user.uid, "lists", slugify(listName))
+    const listDocRef = doc(db, "users", user.id, "lists", slugify(listName))
 
     // running a transaction to check if the list already exists in the database
     await runTransaction(db, async (transaction) => {
@@ -85,7 +85,7 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
     
     // adding list to the context state
     addList({
-    uid: listDocRef.id,
+    id: listDocRef.id,
       name: listName,
       createdAt: new Date()
     })

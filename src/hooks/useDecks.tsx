@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = ( listName: string | undefined) => {
   const { user, authInitializing } = useAuthContext();
-  const userId = user?.uid;
+  const userId = user?.id;
   const [decks, setDecks] = useState<Deck[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ const useDecks = ( listName: string | undefined) => {
       // only fetches the decks if the auth process had finalized
       if (authInitializing) return
 
-      const userId = user?.uid;
+      const userId = user?.id;
       if (!userId) {
         setDecks([])
         setLoading(false);

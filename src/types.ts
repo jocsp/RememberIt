@@ -11,14 +11,14 @@ enum DIFFICULTIES {
 // *** TYPES ***
 
 interface User {
-  uid: string,
+  id: string,
   name: string,
   email: string
   lists: List[]
 }
 
 interface List {
-  uid: String;
+  id: String;
   name: String;
   createdAt: Date;
 }

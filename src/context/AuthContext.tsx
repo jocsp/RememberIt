@@ -72,12 +72,12 @@ const AuthContextProvider = ({ children }: Props) => {
         const lists: List[] = []
         listsSnap.forEach(list => {
           const listData = list.data()
-          lists.push({uid: list.id, name: listData.name, createdAt: listData.createdAt.toDate()})
+          lists.push({id: list.id, name: listData.name, createdAt: listData.createdAt.toDate()})
         })
 
         // dispatching user info to auth context user with custom data | not the data given by Firebase
         loginUser({
-          uid: user.uid,
+          id: user.uid,
           name: userData?.displayName ?? "",
           email: userData?.email ?? "",
           lists: lists

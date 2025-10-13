@@ -8,12 +8,12 @@ import { StrictMode } from "react";
 import { ToastContainer } from "react-toastify";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ErrorBoundary FallbackComponent={Fallback}>
-      <AuthContextProvider>
-        <App />
-        <ToastContainer position="top-center" />
-      </AuthContextProvider>
-    </ErrorBoundary>
-  </StrictMode>
+    <StrictMode>
+        <ErrorBoundary FallbackComponent={Fallback}>
+            <AuthContextProvider>
+                <App />
+                <ToastContainer position="top-center" />
+            </AuthContextProvider>
+        </ErrorBoundary>
+    </StrictMode>,
 );

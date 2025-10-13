@@ -2,7 +2,6 @@
 
 // export const ListsContext = createContext(null)
 
-
 // // reducer
 // const listsReducer = (lists, action) => {
 //     switch(action.type) {

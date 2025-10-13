@@ -1,119 +1,121 @@
 :root {
-  --lightest-primary: #efe9f8;
-  --primary: #7c4dc5;
+    --lightest-primary: #efe9f8;
+    --primary: #7c4dc5;
 }
 
 .navbar {
-  padding: 0rem clamp(2rem, 4vw, 4rem);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    padding: 0rem clamp(2rem, 4vw, 4rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo-img {
-  width: clamp(3.5rem, 4.5vw, 4.5rem);
+    width: clamp(3.5rem, 4.5vw, 4.5rem);
 }
 
 .rememberit {
-  font-size: clamp(1.75rem, 2.25vw, 2.25rem);
-  line-height: (2rem, 2.5vw, 2.5rem);
-  font-weight: 700;
+    font-size: clamp(1.75rem, 2.25vw, 2.25rem);
+    line-height: (2rem, 2.5vw, 2.5rem);
+    font-weight: 700;
 }
 
 .menu {
-  display: flex;
-  gap: 0.5rem;
-  font-size: clamp(1.25rem, 2vw, 1.5rem);
-  line-height: clamp(1.75rem, 2vw, 2rem);
-  height: 100%;
+    display: flex;
+    gap: 0.5rem;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: clamp(1.75rem, 2vw, 2rem);
+    height: 100%;
 }
 
 .menu-item,
 .salute {
-  color: #a0a0a0;
-  padding: 0.5rem 0.7rem;
-  display: flex;
-  gap: 5px;
+    color: #a0a0a0;
+    padding: 0.5rem 0.7rem;
+    display: flex;
+    gap: 5px;
 }
 
 .salute-name {
-  color: var(--primary);
+    color: var(--primary);
 }
 
 .menu-item:hover {
-  color: var(--primary);
-  background-color: var(--lightest-primary);
-  border-radius: 5px;
+    color: var(--primary);
+    background-color: var(--lightest-primary);
+    border-radius: 5px;
 }
 
 .menu-icon {
-  width: clamp(1.25rem, 1.5vw, 1.5rem);
-  height: auto;
+    width: clamp(1.25rem, 1.5vw, 1.5rem);
+    height: auto;
 }
 
 .menu-item:hover > .menu-icon {
-  fill: var(--primary);
+    fill: var(--primary);
 }
 
 .burger-menu {
-  display: none;
-  width: 1.5rem;
+    display: none;
+    width: 1.5rem;
 }
 
 .close-icon {
-  display: none;
-  box-sizing: content-box;
-  border-radius: 50%;
+    display: none;
+    box-sizing: content-box;
+    border-radius: 50%;
 }
 
 .close-icon:hover {
-  background-color: #acacac11;
+    background-color: #acacac11;
 }
 
 /* styles for mobiles */
 @media (max-width: 768px) {
-  .menu {
-    position: absolute;
-    display: block;
-    width: 0px;
-    top: 0;
-    right: 0;
-    opacity: 0;
-    background-color: #f6f6f6;
-    height: 100vh;
-    border-left: 1px solid #f0f0f0;
-    /* might have to change this later, shadow can interfere with the elements behind */
-    box-shadow: -5px 0 5px 5px #f6f6f6;
-    transition: width 0.3s ease-out, opacity 0.2s ease-in;
-  }
+    .menu {
+        position: absolute;
+        display: block;
+        width: 0px;
+        top: 0;
+        right: 0;
+        opacity: 0;
+        background-color: #f6f6f6;
+        height: 100vh;
+        border-left: 1px solid #f0f0f0;
+        /* might have to change this later, shadow can interfere with the elements behind */
+        box-shadow: -5px 0 5px 5px #f6f6f6;
+        transition:
+            width 0.3s ease-out,
+            opacity 0.2s ease-in;
+    }
 
-  .close-icon {
-    display: block;
-    padding: 1rem;
-    width: 2rem;
-  }
+    .close-icon {
+        display: block;
+        padding: 1rem;
+        width: 2rem;
+    }
 
-  .menu.expanded {
-    padding: 0.5rem 1rem;
-    width: 80%;
-    opacity: 1;
-  }
+    .menu.expanded {
+        padding: 0.5rem 1rem;
+        width: 80%;
+        opacity: 1;
+    }
 
-  .menu-item,
-  .salute {
-    padding: 0.5rem 1rem;
-    font-size: 1.8rem;
-    /* white-space property to avoid items to wrap when container's width is narrow */
-    white-space: nowrap;
-  }
+    .menu-item,
+    .salute {
+        padding: 0.5rem 1rem;
+        font-size: 1.8rem;
+        /* white-space property to avoid items to wrap when container's width is narrow */
+        white-space: nowrap;
+    }
 
-  .menu-icon {
-    display: none;
-  }
+    .menu-icon {
+        display: none;
+    }
 
-  .burger-menu {
-    display: inline;
-  }
+    .burger-menu {
+        display: inline;
+    }
 }
 
 /* styles for tablets */

@@ -3,43 +3,43 @@ import { Key } from "react";
 // *** ENUMS ***
 
 enum DIFFICULTIES {
-  EASY,
-  NORMAL,
-  HARD,
+    EASY,
+    NORMAL,
+    HARD,
 }
 
 // *** TYPES ***
 
 interface User {
-  id: string,
-  name: string,
-  email: string
-  lists: List[]
+    id: string;
+    name: string;
+    email: string;
+    lists: List[];
 }
 
 interface List {
-  id: String;
-  name: String;
-  createdAt: Date;
+    id: String;
+    name: String;
+    createdAt: Date;
 }
 
 interface Card {
-  id: Key;
-  question: String;
-  answer: String;
-  dateCreated: Date;
-  dateAnswered?: Date;
-  difficulty: DIFFICULTIES;
+    id: Key;
+    question: String;
+    answer: String;
+    dateCreated: Date;
+    dateAnswered?: Date;
+    difficulty: DIFFICULTIES;
 }
 
 interface Deck {
-  id: Key;
-  userId: String;
-  title: String;
-  description: String;
-  createdAt: Date;
-  starred: Boolean;
-  cards: Card[];
+    id: Key;
+    userId: String;
+    title: String;
+    description: String;
+    createdAt: Date;
+    starred: Boolean;
+    cards: Card[];
 }
 
 export { DIFFICULTIES };

@@ -1,118 +1,139 @@
 import { toast } from "react-toastify";
 import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
-import { useEffect, useRef } from "react"
+import { useEffect, useRef } from "react";
 import { db } from "../firebaseConfig";
 import useAuthContext from "../hooks/useAuthContext";
 import slugify from "../utils/slugify";
 
 type CreateListProps = {
-  setShowCreateList: React.Dispatch<React.SetStateAction<boolean>>
-}
+    setShowCreateList: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 const CreateList = ({ setShowCreateList }: CreateListProps) => {
-  // create the sate
-  const listRef = useRef<HTMLInputElement | null>(null)
-  const { user, addList } = useAuthContext()
+    // create the sate
+    const listRef = useRef<HTMLInputElement | null>(null);
+    const { user, addList } = useAuthContext();
 
-  useEffect(() => {
-    // focusing input as soon as it displays on screen
-    if (listRef.current) {
-      listRef.current.focus()
-    }
+    useEffect(() => {
+        // focusing input as soon as it displays on screen
+        if (listRef.current) {
+            listRef.current.focus();
+        }
 
-    // adds event listener with some delay, to avoid the click being detected when clikcing new list button
-    const timer = setTimeout(() => {
-      document.addEventListener("click", handleClickOutside)
-    }, 0)
-    
-    // will remove listener and clear the timeout when the component unmounts
-    return () => {
-      clearTimeout(timer)
-      document.removeEventListener("click", handleClickOutside)
-    }
-  }, [])
+        // adds event listener with some delay, to avoid the click being detected when clikcing new list button
+        const timer = setTimeout(() => {
+            document.addEventListener("click", handleClickOutside);
+        }, 0);
 
-  const handleClickOutside = (event: MouseEvent) => {
-      
-      if (!listRef.current || !(event)) return
+        // will remove listener and clear the timeout when the component unmounts
+        return () => {
+            clearTimeout(timer);
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
 
-      if (!listRef.current?.contains(event.target as Node)) {
-        return handleSubmit()
-      }
-    }
+    const handleClickOutside = (event: MouseEvent) => {
+        if (!listRef.current || !event) return;
 
-  const handleSubmit = async () => {
-    try {
-      // checking if the listRef.current is not null
-    if (!listRef.current) {
-      throw new Error("listRef.current is null")
-    }
-    
-    // getting list name from the input ref value
-    const listName = listRef.current.value
+        if (!listRef.current?.contains(event.target as Node)) {
+            return handleSubmit();
+        }
+    };
 
-    if (listName === "") {
-      // hide Create List component
-      setShowCreateList(false)
-      return
-    }
+    const handleSubmit = async () => {
+        try {
+            // checking if the listRef.current is not null
+            if (!listRef.current) {
+                throw new Error("listRef.current is null");
+            }
 
-    if (!user) {
-      throw new Error("Can't create list. User is null", { cause: "list-already-exists"})
-    }
+            // getting list name from the input ref value
+            const listName = listRef.current.value;
 
-    // creating a referecen to a list using the name slug as the id
-    const listDocRef = doc(db, "users", user.id, "lists", slugify(listName))
+            if (listName === "") {
+                // hide Create List component
+                setShowCreateList(false);
+                return;
+            }
 
-    // running a transaction to check if the list already exists in the database
-    await runTransaction(db, async (transaction) => {
+            if (!user) {
+                throw new Error("Can't create list. User is null", {
+                    cause: "list-already-exists",
+                });
+            }
 
-      const docSnap = await transaction.get(listDocRef)
+            // creating a referecen to a list using the name slug as the id
+            const listDocRef = doc(
+                db,
+                "users",
+                user.id,
+                "lists",
+                slugify(listName),
+            );
 
-      // throw an error if it already exists
-      if (docSnap.exists()) {
-        throw new Error("List already exists, please use a different name.", { cause: "list-already-exists"})
-      }
+            // running a transaction to check if the list already exists in the database
+            await runTransaction(db, async (transaction) => {
+                const docSnap = await transaction.get(listDocRef);
 
-      const newList = {
-        name: listName,
-        createdAt: serverTimestamp()
-      }
+                // throw an error if it already exists
+                if (docSnap.exists()) {
+                    throw new Error(
+                        "List already exists, please use a different name.",
+                        { cause: "list-already-exists" },
+                    );
+                }
 
-      // add the list to the db using name slug for the id
-      transaction.set(listDocRef, newList)
-    })
-    
-    // adding list to the context state
-    addList({
-    id: listDocRef.id,
-      name: listName,
-      createdAt: new Date()
-    })
+                const newList = {
+                    name: listName,
+                    createdAt: serverTimestamp(),
+                };
 
-    toast.success("List created successfully", {
-      autoClose: 3000,
-    })
+                // add the list to the db using name slug for the id
+                transaction.set(listDocRef, newList);
+            });
 
-    } catch (error) {
-      console.error(error)
+            // adding list to the context state
+            addList({
+                id: listDocRef.id,
+                name: listName,
+                createdAt: new Date(),
+            });
 
-      // check if error was thrown by our code, an then check which was the cause to then use the toast for the custom error message
-      if (error instanceof Error && error.cause == "list-already-exists") {
-        toast.error(error.message)
-      } else {
-        toast.error("Could not create the list. Please try again.")
-      }
-    } 
-    // hide Create List component
-    setShowCreateList(false)
-  }
+            toast.success("List created successfully", {
+                autoClose: 3000,
+            });
+        } catch (error) {
+            console.error(error);
 
-  return (
-    <form onSubmit={(e) => {e.preventDefault(); return handleSubmit()}}>
-      <input ref={listRef} className="create-list" type="text" placeholder="List Name"></input>
-    </form>
-  )
-}
+            // check if error was thrown by our code, an then check which was the cause to then use the toast for the custom error message
+            if (
+                error instanceof Error &&
+                error.cause == "list-already-exists"
+            ) {
+                toast.error(error.message);
+            } else {
+                toast.error("Could not create the list. Please try again.");
+            }
+        }
+        // hide Create List component
+        setShowCreateList(false);
+    };
 
-export default CreateList
+    return (
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                return handleSubmit();
+            }}
+        >
+            <input
+                ref={listRef}
+                className="create-list"
+                type="text"
+                placeholder="List Name"
+            ></input>
+        </form>
+    );
+};
+
+export default CreateList;

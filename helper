@@ -1,11 +1,12 @@
+import path from "node:path";
+
+import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
 import { configs, plugins } from "eslint-config-airbnb-extended";
-import { defineConfig, globalIgnores } from "eslint/config";
+import { rules as prettierConfigRules } from "eslint-config-prettier";
+import prettierPlugin from "eslint-plugin-prettier";
+
+const gitignorePath = path.resolve(".", ".gitignore");
 
 const jsConfig = [
     // ESLint Recommended Rules
@@ -41,23 +42,33 @@ const typescriptConfig = [
     ...configs.react.typescript,
 ];
 
-export default defineConfig([
-    globalIgnores(["dist", "node_modules", "build"]),
+const prettierConfig = [
+    // Prettier Plugin
     {
-        files: ["**/*.{ts,tsx}"],
-        extends: [
-            js.configs.recommended,
-            tseslint.configs.recommended,
-            reactHooks.configs.flat.recommended,
-            reactRefresh.configs.vite,
-        ],
-        languageOptions: {
-            ecmaVersion: 2020,
-            globals: globals.browser,
+        name: "prettier/plugin/config",
+        plugins: {
+            prettier: prettierPlugin,
         },
     },
-    jsConfig,
-    reactConfig,
-    typescriptConfig,
-    eslintConfigPrettier,
-]);
+    // Prettier Config
+    {
+        name: "prettier/config",
+        rules: {
+            ...prettierConfigRules,
+            "prettier/prettier": "error",
+        },
+    },
+];
+
+export default [
+    // Ignore .gitignore files/folder in eslint
+    includeIgnoreFile(gitignorePath),
+    // Javascript Config
+    ...jsConfig,
+    // React Config
+    ...reactConfig,
+    // TypeScript Config
+    ...typescriptConfig,
+    // Prettier Config
+    ...prettierConfig,
+];

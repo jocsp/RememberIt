@@ -30,6 +30,11 @@ const reactConfig = [
     plugins.reactA11y,
     // Airbnb React Recommended Config
     ...configs.react.recommended,
+    {
+        rules: {
+            "react/react-in-jsx-scope": "off",
+        },
+    },
 ];
 
 const typescriptConfig = [

@@ -1,6 +1,5 @@
-import { Key } from "react";
-import DeckCard from "../components/DeckCard";
 import { Link, useParams } from "react-router-dom";
+import DeckCard from "../components/DeckCard";
 import useDecks from "../hooks/useDecks";
 import NavBar from "../components/NavBar";
 import Lists from "../components/Lists";
@@ -18,27 +17,24 @@ const Decks = () => {
 
         // if it is still fetching the decks
         if (loading) {
-            return [1, 2, 3, 4, 5].map((key) => {
-                return <LoadingDeckCard key={key} />;
-            });
+            return [1, 2, 3, 4, 5].map((key) => <LoadingDeckCard key={key} />);
         }
 
         // if decks is empty
-        if (decks.length == 0) {
+        if (decks.length === 0) {
             return <p>No decks to display</p>;
         }
 
         // runs when it's done fetching the decks
         return (
             <>
-                {decks.map((deck): JSX.Element => {
-                    // getting the fields
-                    return (
-                        <Link key={deck.id as Key} to={`/decks/${deck.id}`}>
+                {decks.map(
+                    (deck): JSX.Element => (
+                        <Link key={deck.id} to={`/decks/${deck.id}`}>
                             <DeckCard deck={deck} />
                         </Link>
-                    );
-                })}
+                    ),
+                )}
             </>
         );
     };

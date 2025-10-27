@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { auth } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
-import { getErrorMessage } from "../utils/firebaseErrorMessages";
+import { auth } from "../firebaseConfig";
+import getErrorMessage from "../utils/firebaseErrorMessages";
 import NavBar from "../components/NavBar";
 
 const Login = () => {
@@ -21,12 +21,12 @@ const Login = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
-        } catch (error) {
+        } catch (err) {
             let message = "";
 
-            if (error instanceof FirebaseError) {
+            if (err instanceof FirebaseError) {
                 // getting custom message based on firebase code
-                message = getErrorMessage(error.code);
+                message = getErrorMessage(err.code);
             }
             // in case the error is not a Firebase Error
             if (!message) {
@@ -68,7 +68,7 @@ const Login = () => {
                 {error ? <div className="error mb-2">{error}</div> : null}
 
                 <p>
-                    Don't have an account? Sign up{" "}
+                    Don&apos;t have an account? Sign up{" "}
                     <Link to="/signup" className="underline text-sky-600">
                         here
                     </Link>

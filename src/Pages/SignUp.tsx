@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { auth, db } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { auth, db } from "../firebaseConfig";
 import NavBar from "../components/NavBar";
 import slugify from "../utils/slugify";
+import logger from "../utils/logger";
 
 const SignUp = () => {
     const [error, setError] = useState("");
@@ -27,7 +28,7 @@ const SignUp = () => {
             );
 
             // update displayName to use it in the navbar
-            const user = userCredential.user;
+            const { user } = userCredential;
             await updateProfile(user, { displayName: name });
 
             // save user to database, so I could store there all the things I need
@@ -51,10 +52,10 @@ const SignUp = () => {
                 name: "My List",
                 createdAt: serverTimestamp(),
             });
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            logger.error(err);
             // replacing Firebase: and error code from error.message
-            let message = (error as Error)?.message;
+            const message = (err as Error)?.message;
 
             if (!message) {
                 setError("Something went wrong!");

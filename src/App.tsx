@@ -11,7 +11,7 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import useAuthContext from "./hooks/useAuthContext";
 
-function App() {
+const App = () => {
     // useAuthContext
     const { user } = useAuthContext();
 
@@ -43,6 +43,6 @@ function App() {
         // { path: "decks/:id", element: <SingleDeck />, loader: singleDeckLoader },
     ]);
     return <RouterProvider router={router} />;
-}
+};
 
 export default App;

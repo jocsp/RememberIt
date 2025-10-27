@@ -18,15 +18,15 @@ interface User {
 }
 
 interface List {
-    id: String;
-    name: String;
+    id: string;
+    name: string;
     createdAt: Date;
 }
 
 interface Card {
     id: Key;
-    question: String;
-    answer: String;
+    question: string;
+    answer: string;
     dateCreated: Date;
     dateAnswered?: Date;
     difficulty: DIFFICULTIES;
@@ -34,11 +34,11 @@ interface Card {
 
 interface Deck {
     id: Key;
-    userId: String;
-    title: String;
-    description: String;
+    userId: string;
+    title: string;
+    description: string;
     createdAt: Date;
-    starred: Boolean;
+    starred: boolean;
     cards: Card[];
 }
 

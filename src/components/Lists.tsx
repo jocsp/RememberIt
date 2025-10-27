@@ -9,29 +9,25 @@ const Lists = () => {
     const { listName } = useParams();
     // user contains the lists
     const { user, authInitializing } = useAuthContext();
-    const { lists = [] } = user || {};
+    const { lists: userLists = [] } = user || {};
     // state to show (or not) the create list component
     const [showCreateList, setShowCreateList] = useState(false);
 
     const renderLists = (lists: List[]) => {
         // placeholder while the lists are fetched
         if (authInitializing) {
-            return [1, 2, 3, 4, 5].map((key) => {
-                return <LoadingListItem key={key} />;
-            });
+            return [1, 2, 3, 4, 5].map((key) => <LoadingListItem key={key} />);
         }
 
-        const listElements = lists.map((list) => {
-            return (
-                <Link
-                    className={`lists-item ${listName == list.id ? "active" : ""}`}
-                    key={list.id as Key}
-                    to={`/${list.id}`}
-                >
-                    {list.name}
-                </Link>
-            );
-        });
+        const listElements = lists.map((list) => (
+            <Link
+                className={`lists-item ${listName === list.id ? "active" : ""}`}
+                key={list.id as Key}
+                to={`/${list.id}`}
+            >
+                {list.name}
+            </Link>
+        ));
 
         return listElements;
     };
@@ -41,6 +37,7 @@ const Lists = () => {
             <div className="lists-top">
                 <h2 className="lists-title">Lists</h2>
                 <button
+                    type="button"
                     onClick={() => {
                         setShowCreateList(true);
                     }}
@@ -58,7 +55,7 @@ const Lists = () => {
                 {showCreateList ? (
                     <CreateList setShowCreateList={setShowCreateList} />
                 ) : null}
-                {renderLists(lists)}
+                {renderLists(userLists)}
             </div>
         </div>
     );

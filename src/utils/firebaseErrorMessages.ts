@@ -1,6 +1,4 @@
-type ErrorMessage = {
-    [key: string]: string;
-};
+type ErrorMessage = Record<string, string>;
 
 const errorMessages: ErrorMessage = {
     "auth/invalid-credential": "Email or password is incorrect",
@@ -12,10 +10,11 @@ const getErrorMessage = (errorCode: string): string => {
 
     if (!message) {
         message = "An unexpected error occurred. Please try again";
-        console.log("Error Code: " + errorCode);
+        // eslint-disable-next-line no-console
+        console.error(`"Error Code: " + ${errorCode}`);
     }
 
     return message;
 };
 
-export { getErrorMessage };
+export default getErrorMessage;

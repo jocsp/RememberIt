@@ -1,5 +1,3 @@
-const LoadingListItem = () => {
-    return <div className="loading-list-item"></div>;
-};
+const LoadingListItem = () => <div className="loading-list-item" />;
 
 export default LoadingListItem;

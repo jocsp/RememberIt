@@ -4,41 +4,16 @@ import { useEffect, useRef } from "react";
 import { db } from "../firebaseConfig";
 import useAuthContext from "../hooks/useAuthContext";
 import slugify from "../utils/slugify";
+import logger from "../utils/logger";
 
-type CreateListProps = {
+interface CreateListProps {
     setShowCreateList: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 const CreateList = ({ setShowCreateList }: CreateListProps) => {
     // create the sate
     const listRef = useRef<HTMLInputElement | null>(null);
     const { user, addList } = useAuthContext();
-
-    useEffect(() => {
-        // focusing input as soon as it displays on screen
-        if (listRef.current) {
-            listRef.current.focus();
-        }
-
-        // adds event listener with some delay, to avoid the click being detected when clikcing new list button
-        const timer = setTimeout(() => {
-            document.addEventListener("click", handleClickOutside);
-        }, 0);
-
-        // will remove listener and clear the timeout when the component unmounts
-        return () => {
-            clearTimeout(timer);
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, []);
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (!listRef.current || !event) return;
-
-        if (!listRef.current?.contains(event.target as Node)) {
-            return handleSubmit();
-        }
-    };
 
     const handleSubmit = async () => {
         try {
@@ -103,12 +78,12 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
                 autoClose: 3000,
             });
         } catch (error) {
-            console.error(error);
+            logger.error(error);
 
             // check if error was thrown by our code, an then check which was the cause to then use the toast for the custom error message
             if (
                 error instanceof Error &&
-                error.cause == "list-already-exists"
+                error.cause === "list-already-exists"
             ) {
                 toast.error(error.message);
             } else {
@@ -118,6 +93,33 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
         // hide Create List component
         setShowCreateList(false);
     };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (!listRef.current || !event) return;
+
+        if (!listRef.current?.contains(event.target as Node)) {
+            handleSubmit();
+        }
+    };
+
+    useEffect(() => {
+        // focusing input as soon as it displays on screen
+        if (listRef.current) {
+            listRef.current.focus();
+        }
+
+        // adds event listener with some delay, to avoid the click being detected when clikcing new list button
+        const timer = setTimeout(() => {
+            document.addEventListener("click", handleClickOutside);
+        }, 0);
+
+        // will remove listener and clear the timeout when the component unmounts
+        return () => {
+            clearTimeout(timer);
+            document.removeEventListener("click", handleClickOutside);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <form
@@ -131,7 +133,7 @@ const CreateList = ({ setShowCreateList }: CreateListProps) => {
                 className="create-list"
                 type="text"
                 placeholder="List Name"
-            ></input>
+            />
         </form>
     );
 };

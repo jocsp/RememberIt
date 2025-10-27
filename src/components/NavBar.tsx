@@ -1,15 +1,15 @@
-import remeberItLogo from "../assets/brain.webp";
-import { Link } from "react-router-dom";
-import { auth } from "../firebaseConfig";
-import { signOut } from "firebase/auth";
-import useAuthContext from "../hooks/useAuthContext";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { useErrorBoundary } from "react-error-boundary";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import useAuthContext from "../hooks/useAuthContext";
 import SettingsIcon from "./SettingsIcon";
 import burgerMenuIcon from "../assets/burger-menu-icon.svg";
 import closeIcon from "../assets/close-icon.svg";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import remeberItLogo from "../assets/brain.webp";
+import logger from "../utils/logger";
 
 const NavBar = () => {
     const { user } = useAuthContext();
@@ -41,7 +41,7 @@ const NavBar = () => {
             navigate("/");
         } catch (error) {
             toast.error("Error trying to log out user");
-            console.error(error);
+            logger.error(error);
             showBoundary(error);
         }
     };
@@ -60,6 +60,7 @@ const NavBar = () => {
             {/* next ref wraps all the elements related to the mneu for the handleOutsideClick to work */}
             <div ref={menuRef}>
                 <button
+                    type="button"
                     onClick={() => setIsMenuExpanded(true)}
                     className="burger-menu"
                 >
@@ -75,6 +76,7 @@ const NavBar = () => {
                     className={`menu text-2xl ${isMenuExpanded ? "expanded" : ""}`}
                 >
                     <button
+                        type="button"
                         onClick={() => setIsMenuExpanded(false)}
                         className={`close-icon ${isMenuExpanded ? "expanded" : ""}`}
                     >
@@ -90,7 +92,7 @@ const NavBar = () => {
                         <>
                             <div className="salute">Howdy guest</div>
 
-                            <button className="menu-item">
+                            <button type="button" className="menu-item">
                                 <SettingsIcon />
                                 Settings
                             </button>
@@ -107,11 +109,12 @@ const NavBar = () => {
                                 Welcome{" "}
                                 <span className="salute-name">{user.name}</span>
                             </div>
-                            <button className="menu-item">
+                            <button type="button" className="menu-item">
                                 <SettingsIcon />
                                 Settings
                             </button>
                             <button
+                                type="button"
                                 onClick={handleLogout}
                                 className="menu-item"
                             >

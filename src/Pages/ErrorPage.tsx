@@ -1,9 +1,9 @@
-import { useRouteError } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useRouteError, Link } from "react-router-dom";
+import logger from "../utils/logger";
 
-export default function ErrorPage() {
+const ErrorPage = () => {
     const error: unknown = useRouteError();
-    console.error(error);
+    logger.error(error);
 
     return (
         <div className="text-center pt-24 leading-10">
@@ -24,4 +24,6 @@ export default function ErrorPage() {
             </Link>
         </div>
     );
-}
+};
+
+export default ErrorPage;

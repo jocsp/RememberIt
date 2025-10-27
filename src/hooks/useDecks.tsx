@@ -8,11 +8,12 @@ import {
     getDoc,
     orderBy,
 } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import logger from "../utils/logger";
 
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = (listName: string | undefined) => {
@@ -35,7 +36,6 @@ const useDecks = (listName: string | undefined) => {
             // only fetches the decks if the auth process had finalized
             if (authInitializing) return;
 
-            const userId = user?.id;
             if (!userId) {
                 setDecks([]);
                 setLoading(false);
@@ -63,11 +63,11 @@ const useDecks = (listName: string | undefined) => {
 
                 const decksSnapshot = await getDocs(q);
 
-                const docs = decksSnapshot.docs.map((doc): Deck => {
-                    const docData = doc.data();
+                const docs = decksSnapshot.docs.map((document): Deck => {
+                    const docData = document.data();
                     // transforming the doc snapshots to javascript objects
                     return {
-                        id: doc.id as Key,
+                        id: document.id as Key,
                         title: docData.title,
                         description: docData.description,
                         starred: docData.starred,
@@ -81,13 +81,13 @@ const useDecks = (listName: string | undefined) => {
                 setLoading(false);
             } catch (error) {
                 // this would be the error I threw in the code above trying to find the list using listName
-                if (error instanceof Error && error.cause == "no-list-found") {
+                if (error instanceof Error && error.cause === "no-list-found") {
                     toast.error(error.message);
                 } else {
                     toast.error("Unexpected error occured.");
                 }
                 navigate("/");
-                console.error(error);
+                logger.error(error);
             }
         };
 
@@ -95,7 +95,7 @@ const useDecks = (listName: string | undefined) => {
         setLoading(true);
         setDecks([]);
         fetchDecks();
-    }, [userId, authInitializing, listName]);
+    }, [userId, authInitializing, listName, navigate]);
 
     return { decks, loading };
 };

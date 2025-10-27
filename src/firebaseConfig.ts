@@ -21,6 +21,4 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
-export const isLoggedIn = () => {
-    return !!auth.currentUser;
-};
+export const isLoggedIn = () => !!auth.currentUser;

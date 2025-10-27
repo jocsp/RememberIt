@@ -1,5 +1,3 @@
-const LoadingDeckCard = () => {
-    return <div className="loading-deck-card"></div>;
-};
+const LoadingDeckCard = () => <div className="loading-deck-card" />;
 
 export default LoadingDeckCard;

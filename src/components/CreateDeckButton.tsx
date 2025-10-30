@@ -12,19 +12,22 @@ import TextInput from "./TextInput";
 import TextAreaInput from "./TextAreaInput";
 import useAuthContext from "../hooks/useAuthContext";
 import { db } from "../firebaseConfig";
+import LoadingSpinner from "./LoadingSpinner";
 
 const formSchema = z.object({
     title: z
         .string()
         .min(1, "Title is required")
-        .max(60, "Title is too long, it should be less than 60 characters").trim(),
+        .max(60, "Title is too long, it should be less than 60 characters")
+        .trim(),
     description: z
         .string()
         .min(1, "Description is required")
         .max(
             300,
             "Description is too long, it should be less than 300 characters",
-        ).trim(),
+        )
+        .trim(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -43,14 +46,18 @@ const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
         reset,
         formState: { errors },
     } = useForm({ resolver: zodResolver(formSchema) });
+    const [loading, setLoading] = useState(false);
 
     const submitForm: SubmitHandler<FormData> = async (data) => {
         // validating form data
         try {
+            // shows the spinner while the submission is processing
+            setLoading(true)
+
             // if the data is not valid this will throw an error
             // and stop the submission process
             const validatedFields = formSchema.parse(data);
-            
+
             const deckData = {
                 ...validatedFields,
                 starred: false,
@@ -65,14 +72,22 @@ const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
             reset();
             refetchDecks();
             toast.success("Deck created successfully!");
+            // indicates that the form submission is done
+            setLoading(false)
         } catch (error) {
             logger.error(error);
 
             if (error instanceof z.ZodError) {
-                toast.error("Please fix the errors in the form before submitting.");
+                toast.error(
+                    "Please fix the errors in the form before submitting.",
+                );
             } else {
-                toast.error("An error occurred while creating the deck. Please try again.");
+                toast.error(
+                    "An error occurred while creating the deck. Please try again.",
+                );
             }
+            // sets loading to false in case there was an error
+            setLoading(false)
         }
     };
     return (
@@ -109,7 +124,14 @@ const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
                             error={errors.description}
                         />
 
-                        <input type="submit" className="primary-button" />
+                        <button
+                            type="submit"
+                            className="primary-button"
+                            disabled={loading}
+                        >
+                            {/* if it is loading just show the normal text, if not then show the spinner */}
+                            {!loading ? "Create Deck" : <LoadingSpinner />}
+                        </button>
                     </form>
                 </div>
             </Modal>

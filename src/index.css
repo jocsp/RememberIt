@@ -84,6 +84,11 @@ body {
     @apply text-red-500 text-sm mb-1
 }
 
+.loading-spinner {
+    @apply w-6 h-6 border-2 border-current border-t-transparent rounded-full animate-spin;
+    margin: 0 auto;
+}
+
 .modal-backdrop {
     /* makes the modal-backdrop not clickable */
     pointer-events: none;

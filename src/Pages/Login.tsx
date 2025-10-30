@@ -46,26 +46,26 @@ const Login = () => {
             >
                 <h1 className="mb-4 bold text-2xl">Login</h1>
                 <input
-                    className="text-input mb-2 rounded-md border shadow-sm py-2 px-6"
+                    className="primary-input mb-4"
                     type="text"
                     placeholder="Email"
                     name="email"
                     required
                 />
                 <input
-                    className="text-input mb-4 rounded-md border shadow-sm py-2 px-6"
+                    className="primary-input mb-4"
                     type="password"
                     placeholder="Password"
                     name="password"
                     required
                 />
                 <input
-                    className="primary-button mb-4"
+                    className="primary-button mb-4 mt-4"
                     type="submit"
                     value="Login"
                 />
 
-                {error ? <div className="error mb-2">{error}</div> : null}
+                {error ? <div className="error-box mb-2">{error}</div> : null}
 
                 <p>
                     Don&apos;t have an account? Sign up{" "}

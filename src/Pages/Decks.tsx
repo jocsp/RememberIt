@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import Lists from "../components/Lists";
 import LoadingDeckCard from "../components/LoadingDeckCard";
 import NoLists from "../components/NoLists";
+import CreateDeckButton from "../components/CreateDeckButton";
 
 const Decks = () => {
     const { listName } = useParams();
@@ -14,10 +15,15 @@ const Decks = () => {
         if (!listName) {
             return <NoLists />;
         }
-
         // if it is still fetching the decks
         if (loading) {
-            return [1, 2, 3, 4, 5].map((key) => <LoadingDeckCard key={key} />);
+            return (
+                <div className="decks-container">
+                    {[1, 2, 3, 4, 5].map((key) => (
+                        <LoadingDeckCard key={key} />
+                    ))}
+                </div>
+            );
         }
 
         // if decks is empty
@@ -27,7 +33,8 @@ const Decks = () => {
 
         // runs when it's done fetching the decks
         return (
-            <>
+            <div className="decks-container">
+                <CreateDeckButton />
                 {decks.map(
                     (deck): JSX.Element => (
                         <Link key={deck.id} to={`/decks/${deck.id}`}>
@@ -35,7 +42,7 @@ const Decks = () => {
                         </Link>
                     ),
                 )}
-            </>
+            </div>
         );
     };
 
@@ -44,7 +51,7 @@ const Decks = () => {
             <NavBar />
             <div className="main-content">
                 <Lists />
-                <div className="decks-container">{renderDecks()}</div>
+                {renderDecks()}
             </div>
         </>
     );

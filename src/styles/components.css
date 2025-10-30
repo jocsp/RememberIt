@@ -12,7 +12,7 @@
     cursor: pointer;
 }
 
-.error {
+.error-box {
     border-radius: 5px;
     border: 1px solid #ff0000;
     background-color: #ff000022;

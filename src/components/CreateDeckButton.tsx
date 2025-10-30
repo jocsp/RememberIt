@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,42 +10,69 @@ import Modal from "./Modal";
 import logger from "../utils/logger";
 import TextInput from "./TextInput";
 import TextAreaInput from "./TextAreaInput";
+import useAuthContext from "../hooks/useAuthContext";
+import { db } from "../firebaseConfig";
 
 const formSchema = z.object({
     title: z
         .string()
         .min(1, "Title is required")
-        .max(60, "Title is too long, it should be less than 60 characters"),
+        .max(60, "Title is too long, it should be less than 60 characters").trim(),
     description: z
         .string()
         .min(1, "Description is required")
         .max(
             300,
             "Description is too long, it should be less than 300 characters",
-        ),
+        ).trim(),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-const CreateDeckButton = () => {
-    const [showModal, setShowModal] = useState(false);
+interface CreateDeckButtonProps {
+    refetchDecks: () => void;
+}
 
+const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
+    const [showModal, setShowModal] = useState(false);
+    const { user } = useAuthContext();
+    const { listName } = useParams();
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({ resolver: zodResolver(formSchema) });
 
-    const submitForm: SubmitHandler<FormData> = (data) => {
-        // modal should appear here
-        logger.log(data);
+    const submitForm: SubmitHandler<FormData> = async (data) => {
+        // validating form data
+        try {
+            // if the data is not valid this will throw an error
+            // and stop the submission process
+            const validatedFields = formSchema.parse(data);
+            
+            const deckData = {
+                ...validatedFields,
+                starred: false,
+                userId: user?.id,
+                listId: listName,
+                createdAt: serverTimestamp(),
+            };
 
-        const result = formSchema.safeParse(data);
+            await addDoc(collection(db, "decks"), deckData);
 
-        if (result.success) {
-            logger.log(result);
-        } else {
-            logger.log(result.error);
+            setShowModal(false);
+            reset();
+            refetchDecks();
+            toast.success("Deck created successfully!");
+        } catch (error) {
+            logger.error(error);
+
+            if (error instanceof z.ZodError) {
+                toast.error("Please fix the errors in the form before submitting.");
+            } else {
+                toast.error("An error occurred while creating the deck. Please try again.");
+            }
         }
     };
     return (
@@ -71,22 +101,6 @@ const CreateDeckButton = () => {
                             register={register}
                             error={errors.title}
                         />
-
-                        {/* <label htmlFor="description">
-                            <p className="mb-1 text-md bold">Description</p>
-                            {errors.description ? (
-                                <p className="error-line">
-                                    {errors.description.message}
-                                </p>
-                            ) : null}
-                            <textarea
-                                id="description"
-                                placeholder="Write your deck description here..."
-                                rows={3}
-                                className="primary-input resize-none"
-                                {...register("description")}
-                            />
-                        </label> */}
 
                         <TextAreaInput
                             label="description"

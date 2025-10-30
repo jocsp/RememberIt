@@ -20,8 +20,13 @@ const useDecks = (listName: string | undefined) => {
     const { user, authInitializing } = useAuthContext();
     const userId = user?.id;
     const [decks, setDecks] = useState<Deck[]>([]);
+    const [refetch, setRefetch] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    const refetchDecks = () => {
+        setRefetch((prev) => !prev);
+    }
 
     useEffect(() => {
         const fetchDecks = async () => {
@@ -95,9 +100,9 @@ const useDecks = (listName: string | undefined) => {
         setLoading(true);
         setDecks([]);
         fetchDecks();
-    }, [userId, authInitializing, listName, navigate]);
+    }, [userId, authInitializing, listName, navigate, refetch]);
 
-    return { decks, loading };
+    return { decks, loading, refetchDecks};
 };
 
 export default useDecks;

@@ -10,23 +10,31 @@ import {
 } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
 import { db } from "../firebaseConfig";
 import { Deck } from "../types";
 import useAuthContext from "./useAuthContext";
 import logger from "../utils/logger";
+import useDecksStore from "../stores/decks.store";
 
 // useDecks will receive the name of the list so it can retrieve the decks of that list
 const useDecks = (listName: string | undefined) => {
     const { user, authInitializing } = useAuthContext();
     const userId = user?.id;
-    const [decks, setDecks] = useState<Deck[]>([]);
+    const { decks, setDecks } = useDecksStore(
+        // useShallow prevents returning a new object everytime, therefore, prevents re renders
+        useShallow((state) => ({
+            decks: state.decks,
+            setDecks: state.setDecks,
+        })),
+    );
     const [refetch, setRefetch] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const refetchDecks = () => {
         setRefetch((prev) => !prev);
-    }
+    };
 
     useEffect(() => {
         const fetchDecks = async () => {
@@ -100,9 +108,9 @@ const useDecks = (listName: string | undefined) => {
         setLoading(true);
         setDecks([]);
         fetchDecks();
-    }, [userId, authInitializing, listName, navigate, refetch]);
+    }, [userId, authInitializing, listName, navigate, refetch, setDecks]);
 
-    return { decks, loading, refetchDecks};
+    return { decks, loading, refetchDecks };
 };
 
 export default useDecks;

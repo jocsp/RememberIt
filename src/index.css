@@ -81,7 +81,7 @@ body {
 }
 
 .error-line {
-    @apply text-red-500 text-sm mb-1
+    @apply text-red-500 text-sm mb-1;
 }
 
 .loading-spinner {
@@ -92,7 +92,7 @@ body {
 .modal-backdrop {
     /* makes the modal-backdrop not clickable */
     pointer-events: none;
-    position: absolute;    
+    position: absolute;
     background-color: #22222222;
     width: 100vw;
     height: 100vh;
@@ -108,7 +108,6 @@ body {
     opacity: 1;
     /* clickable again */
     pointer-events: auto;
-
 }
 
 .modal {
@@ -131,7 +130,9 @@ body {
     transform: translate(-50%, calc(-50% - 50px)) scale(0.5);
     /* makes the scale from the center  */
     transform-origin: center;
-    transition: opacity 0.3s, transform 0.3s;
+    transition:
+        opacity 0.3s,
+        transform 0.3s;
     overflow-y: auto;
 }
 

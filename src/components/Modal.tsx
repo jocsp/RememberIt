@@ -16,7 +16,7 @@ const Modal = ({ children, showingModal, onClose }: Props) => {
             if (showingModal) {
                 ignoreClickOutsideRef.current = false;
             } else {
-              ignoreClickOutsideRef.current = true
+                ignoreClickOutsideRef.current = true;
             }
         }, 0);
 
@@ -44,7 +44,6 @@ const Modal = ({ children, showingModal, onClose }: Props) => {
         }
 
         return () => {
-
             // cleaning up the timer and the event listeners
             document.removeEventListener("keydown", handleEscKey);
             document.removeEventListener("click", handleClickOutside);
@@ -58,9 +57,7 @@ const Modal = ({ children, showingModal, onClose }: Props) => {
         >
             <div
                 ref={modalRef}
-                className={
-                    showingModal ? "modal show" : "modal"
-                }
+                className={showingModal ? "modal show" : "modal"}
             >
                 <div className="flex justify-start">
                     <button type="button" onMouseUp={() => onClose()}>

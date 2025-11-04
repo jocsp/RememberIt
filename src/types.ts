@@ -39,7 +39,8 @@ interface Deck {
     description: string;
     createdAt: Date;
     starred: boolean;
-    cards: Card[];
+    listId: string;
+    // cards: Card[];
 }
 
 export { DIFFICULTIES };

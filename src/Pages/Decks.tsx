@@ -9,7 +9,7 @@ import CreateDeckButton from "../components/CreateDeckButton";
 
 const Decks = () => {
     const { listName } = useParams();
-    const { decks, loading, refetchDecks } = useDecks(listName);
+    const { decks, loading } = useDecks(listName);
 
     const renderDecks = () => {
         if (!listName) {
@@ -34,7 +34,7 @@ const Decks = () => {
         // runs when it's done fetching the decks
         return (
             <div className="decks-container">
-                <CreateDeckButton refetchDecks={refetchDecks}/>
+                <CreateDeckButton />
                 {decks.map(
                     (deck): JSX.Element => (
                         <Link key={deck.id} to={`/decks/${deck.id}`}>

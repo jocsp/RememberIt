@@ -13,6 +13,7 @@ import TextAreaInput from "./TextAreaInput";
 import useAuthContext from "../hooks/useAuthContext";
 import { db } from "../firebaseConfig";
 import LoadingSpinner from "./LoadingSpinner";
+import useDecksStore from "../stores/decks.store";
 
 const formSchema = z.object({
     title: z
@@ -32,11 +33,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface CreateDeckButtonProps {
-    refetchDecks: () => void;
-}
-
-const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
+const CreateDeckButton = () => {
     const [showModal, setShowModal] = useState(false);
     const { user } = useAuthContext();
     const { listName } = useParams();
@@ -46,34 +43,41 @@ const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
         reset,
         formState: { errors },
     } = useForm({ resolver: zodResolver(formSchema) });
+    const addDeck = useDecksStore((state) => state.addDeck);
     const [loading, setLoading] = useState(false);
 
     const submitForm: SubmitHandler<FormData> = async (data) => {
         // validating form data
         try {
             // shows the spinner while the submission is processing
-            setLoading(true)
+            setLoading(true);
 
             // if the data is not valid this will throw an error
             // and stop the submission process
             const validatedFields = formSchema.parse(data);
 
+            if (!user?.id || !listName) {
+                throw new Error("User or list information is missing");
+            }
+
             const deckData = {
                 ...validatedFields,
                 starred: false,
-                userId: user?.id,
+                userId: user.id,
                 listId: listName,
                 createdAt: serverTimestamp(),
             };
 
-            await addDoc(collection(db, "decks"), deckData);
+            const docResult = await addDoc(collection(db, "decks"), deckData);
 
             setShowModal(false);
             reset();
-            refetchDecks();
+
+            // including deck id and overriding createdAt to use Date type
+            addDeck({ id: docResult.id, ...deckData, createdAt: new Date() });
             toast.success("Deck created successfully!");
             // indicates that the form submission is done
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
             logger.error(error);
 
@@ -87,7 +91,7 @@ const CreateDeckButton = ({ refetchDecks }: CreateDeckButtonProps) => {
                 );
             }
             // sets loading to false in case there was an error
-            setLoading(false)
+            setLoading(false);
         }
     };
     return (

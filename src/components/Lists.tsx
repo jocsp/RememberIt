@@ -12,14 +12,23 @@ const Lists = () => {
     const { lists: userLists = [] } = user || {};
     // state to show (or not) the create list component
     const [showCreateList, setShowCreateList] = useState(false);
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
-    const renderLists = (lists: List[]) => {
+    const renderLists = (lists: List[], search: string) => {
         // placeholder while the lists are fetched
         if (authInitializing) {
             return [1, 2, 3, 4, 5].map((key) => <LoadingListItem key={key} />);
         }
 
-        const listElements = lists.map((list) => (
+        // filter the lists based on the search term
+        const filteredLists = lists.filter(
+            // checks if the search term is included in the list name
+            // case insensitive
+            (list) => list.name.toLowerCase().includes(search.toLowerCase()),
+        );
+
+        // display the filtered lists
+        const listElements = filteredLists.map((list) => (
             <Link
                 className={`lists-item ${listName === list.id ? "active" : ""}`}
                 key={list.id as Key}
@@ -50,12 +59,14 @@ const Lists = () => {
                 className="list-search-bar"
                 type="text"
                 placeholder="Search a list..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="lists-items pt-2 pb-4 pl-1 pr-2">
                 {showCreateList ? (
                     <CreateList setShowCreateList={setShowCreateList} />
                 ) : null}
-                {renderLists(userLists)}
+                {renderLists(userLists, searchTerm)}
             </div>
         </div>
     );

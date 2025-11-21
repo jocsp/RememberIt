@@ -30,6 +30,12 @@ const useDecks = (listName: string | undefined) => {
     );
     const [refetch, setRefetch] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadedListName, setLoadedListName] = useState<string | undefined>(
+        undefined,
+    );
+    // loading is set to false when the user clicks a on a new list, therefore this is a better way to
+    // detect if the decks are loading or not
+    const isLoading = loading || loadedListName !== listName;
     const navigate = useNavigate();
 
     const refetchDecks = () => {
@@ -41,6 +47,7 @@ const useDecks = (listName: string | undefined) => {
             if (!listName) {
                 setLoading(false);
                 setDecks([]);
+                setLoadedListName(undefined);
                 // no need to return anything
                 // decks page would show a message to the user to select a list
                 return;
@@ -52,6 +59,7 @@ const useDecks = (listName: string | undefined) => {
             if (!userId) {
                 setDecks([]);
                 setLoading(false);
+                setLoadedListName(undefined);
                 return;
             }
             try {
@@ -92,6 +100,7 @@ const useDecks = (listName: string | undefined) => {
 
                 setDecks(docs);
                 setLoading(false);
+                setLoadedListName(listName);
             } catch (error) {
                 // this would be the error I threw in the code above trying to find the list using listName
                 if (error instanceof Error && error.cause === "no-list-found") {
@@ -106,11 +115,12 @@ const useDecks = (listName: string | undefined) => {
 
         // before each run, loading should be set to true to indicate that the app is loading new decks
         setLoading(true);
+        setLoadedListName(undefined);
         setDecks([]);
         fetchDecks();
     }, [userId, authInitializing, listName, navigate, refetch, setDecks]);
 
-    return { decks, loading, refetchDecks };
+    return { decks, isLoading, refetchDecks };
 };
 
 export default useDecks;
